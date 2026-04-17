@@ -1,0 +1,21 @@
+{
+  "name": "netsuite-api-website",
+  "version": "1.0.0",
+  "description": "NetSuite Rental Revenue Report Dashboard — OAuth 2.0 M2M",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "generate-cert": "node generate-cert.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "node-forge": "^1.4.0"
+  }
+}

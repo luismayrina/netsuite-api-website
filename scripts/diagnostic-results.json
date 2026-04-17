@@ -1,0 +1,74 @@
+{
+  "config": {
+    "accountId": "4815401",
+    "clientId": "7b7095106e9ee5c54e1b41b1e02e4185edf306d2e16b594d280ad6fd441710c4",
+    "certId": "5GPSbHMSU5BrB6w6uUVgqIDJseAneOXHgUQM9cum0wA",
+    "tokenUrl": "https://4815401.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token"
+  },
+  "results": [
+    {
+      "label": "PS256_restlets_rest_webservices",
+      "status": 200,
+      "response": "{\"access_token\":\"eyJraWQiOiJjLjQ4MTU0MDEuMjAyNi0wMy0wN18wOS0xOC01MSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIxMTA5Ozc1NjY2IiwiYXVkIjpbIkU4MTU0N0QwLUREMzktNEQ1My04QkRGLTgyNUE2NEYwRDNDODs0ODE1NDAxIiwiN2I3MDk1MTA2ZTllZTVjNTRlMWI0MWIxZTAyZTQxODVlZGYzMDZkMmUxNmI1OTRkMjgwYWQ2ZmQ0NDE3MTBjNCJdLCJzY29wZSI6WyJyZXN0X3dlYnNlcnZpY2VzIiwicmVzdGxldHMiXSwiaXNzIjoiaHR0cHM6Ly9zeXN0ZW0ubmV0c3VpdGUuY29tIiwib2l0IjoxNzc2MzI1NTAxLCJleHAiOjE3NzYzMjkxMDEsImlhdCI6MTc3NjMyNTUwMSwianRpIjoiNDgxNTQwMS5hLWMubnVsbC4xNzc2MzI1NTAxNTgzIn0.b8rfzCxytGHiGj7RUz4Et4kaf_pg8LxCpOH_WGzLVbGKm5B2PjzxDi1HeQrIzFDmkoEHXTQCBRrlS3rQrB1jd_zudFmlgbKIuc4Xn463309NIa125G36JdgNSiLRK36J0ZC1QQuwCCKWKJIUCGWjzO-YRv2AaWRz1Nj5vvMf7N6IC97dgExWADXk2NuDiAhTU64KF8Y32WLiD_mMCTJKkmnfQC9wsoCacXZ-h3wSZWJl71ImVRHKyqIIfvanpy1EeZR-ViW-wE1DQOjWGba416_fjKgnY5fgz9rr77gzx2j8HRdOyo7Jvv1GNWZZC6lnpuFQkruZoaqzEtn488b0GHEgPpqF_WHvkAciTNPw-8jXB1ZYx3TNuGZpih-GV3VIkwIMv-HmGa9kUabD4QxALI5BVYKZTArL4d8wqE5BNpddSoOJxMD5U1CesZLshZF9LnsD9Dqy3kgfh3eiHzkaW9V1YF3ztkZLem8GTxgxwXHR64gI5Yz5-hWFBJ6Uz5UtNVQNfDNduLsP2Doc_2QwZyQwfXUSHM2swA1DgIuT8OCIKzlb6u6gYfprFFBwJAx4nEMSIZtTxagzs7292QviES_fgRDQPzCObb4ZVeLVg51zeL0n5Q96eObj0qb_sCMd10l0ciyEeZ0cO9hS10Jt-ehtbdbO2tyPzJ0mr3BcAqM\",\"expires_in\":3600,\"token_type\":\"Bearer\"}\n",
+      "aud": "https://4815401.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
+      "scope": "restlets rest_webservices",
+      "alg": "PS256"
+    },
+    {
+      "label": "PS256_rest_webservices",
+      "status": 200,
+      "response": "{\"access_token\":\"eyJraWQiOiJjLjQ4MTU0MDEuMjAyNi0wMy0wN18wOS0xOC01MSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIxMTA5Ozc1NjY2IiwiYXVkIjpbIkU4MTU0N0QwLUREMzktNEQ1My04QkRGLTgyNUE2NEYwRDNDODs0ODE1NDAxIiwiN2I3MDk1MTA2ZTllZTVjNTRlMWI0MWIxZTAyZTQxODVlZGYzMDZkMmUxNmI1OTRkMjgwYWQ2ZmQ0NDE3MTBjNCJdLCJzY29wZSI6WyJyZXN0X3dlYnNlcnZpY2VzIl0sImlzcyI6Imh0dHBzOi8vc3lzdGVtLm5ldHN1aXRlLmNvbSIsIm9pdCI6MTc3NjMyNTUwMSwiZXhwIjoxNzc2MzI5MTAxLCJpYXQiOjE3NzYzMjU1MDEsImp0aSI6IjQ4MTU0MDEuYS1jLm51bGwuMTc3NjMyNTUwMTk1OCJ9.V5GtB8HsuXYHFA4LwL2t5ay50vutXy5ME0rS4eCbEAimU8jg2gRTBuV8PksSBCbpoJUe2uKKEoQWvTjVFUHdG4RNgJVW2FuebunRJCGDJXyqmoUPQ45BXlNUG59rkmOolEKGDdzhVpugz5L6zDZpMLIDgJTKgcLVtqkU4MUaXd3Khf9bFMwo5fS3qXgFCAy5EpcLy1MKhmyyoZfcQpGKFlWT3MznIM3GWLo5nj39yhgvLHSFcpu58jR1k0fRH88UPEMA4ULPOm2vy3OOnQRLNjN2S3uur3iQhatK5jZaa2o6SQ70iOp4hy89y4JTeF4YaQQZaOJFrSvQKROb8RR7DhWuF2UeH5QObIbzdQyivOwuFIYN-fECawRGx5vBCPc7qFJhykfZ8uB5BqJeUpPbJPkIxSs9MhwH6c9LcDlyEE6zEpNZQ0jRFlN9Tpzx8ozRUcVRKKgxLDe6t5i0Yfok2OIcaCdjPPMWQUlsQeWiBo3_kTNlomKfYWV35t5M8jc8oOvQxWq3BMiWzoQWmLCPXusoevxTWfgttLSx6pQSq-7bVmxQ3Yiplcq_pCsfJEB3hRRDrh6lZ-WRp9F0hXeznC4tS3eMQD0nloNbJMVbZ-Bji_nNGqAf326qS0inYuctrEnhYUs1S86B1Yz7hGIuTCHLK1ygknt4FGhrR7nV8o8\",\"expires_in\":3600,\"token_type\":\"Bearer\"}\n",
+      "aud": "https://4815401.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
+      "scope": "rest_webservices",
+      "alg": "PS256"
+    },
+    {
+      "label": "PS256_restlets",
+      "status": 200,
+      "response": "{\"access_token\":\"eyJraWQiOiJjLjQ4MTU0MDEuMjAyNi0wMy0wN18wOS0xOC01MSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIxMTA5Ozc1NjY2IiwiYXVkIjpbIkU4MTU0N0QwLUREMzktNEQ1My04QkRGLTgyNUE2NEYwRDNDODs0ODE1NDAxIiwiN2I3MDk1MTA2ZTllZTVjNTRlMWI0MWIxZTAyZTQxODVlZGYzMDZkMmUxNmI1OTRkMjgwYWQ2ZmQ0NDE3MTBjNCJdLCJzY29wZSI6WyJyZXN0bGV0cyJdLCJpc3MiOiJodHRwczovL3N5c3RlbS5uZXRzdWl0ZS5jb20iLCJvaXQiOjE3NzYzMjU1MDIsImV4cCI6MTc3NjMyOTEwMiwiaWF0IjoxNzc2MzI1NTAyLCJqdGkiOiI0ODE1NDAxLmEtYy5udWxsLjE3NzYzMjU1MDI4OTMifQ.Q4-4hfxvxi7oQhOz5iJGGpd0fVGTwhAJXkrA27DFCYf7Vv50Avy82_DD9-M5aeKxxFRpf9miyoPFvr4Nei3GsLIDHB4RPfgKyOSSWT0ZcrnyZVTbVmP_jKLh5kv8TkWKSCXfzNCHS8eF6j4U7NwVCY0x5Iq4qwZTkmNTa-w1CEaHuWgdssVWXv9DP71qQUax3qhTZnEEOxXCV_qTTKzQn8hbtwhgekPtxfvEZUQOKNwexeY6-Evz5nSZpRFiQ21Bb1RgoZbhIZcNv1RcVktZraaIPhisI0jORtuoy_VtPXEoaTxr4yyS3xDrw7YxjOlX2JGGbC4tSoqBaZe_zq2UXljUjB4AfQFZtIBqs4wMfZn2iU4whLBD5p7mc4ZeJRdzRMEuTX9Ni4gR0HmLZCO5da0AU8MqHRFeWFk_8KCmHaG0Hoz7vKTS6nAIRLGpU9nWaFOx47Eeetvb77-uxHIu-Fy3j-y2_PoQa1CikqkyvpoK6kP1lfgZnM-SL216HBNBW0AmTQXM4Ejtg1WXbJeSFdXpwCgKayPPsdieT81ijw5V7UuxDMlqpiymGxjU1sgOIwF5Fw6S8Kpku3uPdromonWkzNIrXGRiXaqdEq25IgzhpRFf7-ZGJm6u446amMgSdzaeOT3ClNg0LtDml9J8N893TYSLSniayJs0DYyOyUk\",\"expires_in\":3600,\"token_type\":\"Bearer\"}\n",
+      "aud": "https://4815401.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
+      "scope": "restlets",
+      "alg": "PS256"
+    },
+    {
+      "label": "RS256_rest_webservices",
+      "status": 400,
+      "response": "{\"error\":\"invalid_grant\"}\n",
+      "aud": "https://4815401.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
+      "scope": "rest_webservices",
+      "alg": "RS256"
+    },
+    {
+      "label": "RS256_restlets",
+      "status": 400,
+      "response": "{\"error\":\"invalid_grant\"}\n",
+      "aud": "https://4815401.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
+      "scope": "restlets",
+      "alg": "RS256"
+    },
+    {
+      "label": "RS256_restlets_rest_webservices",
+      "status": 400,
+      "response": "{\"error\":\"invalid_grant\"}\n",
+      "aud": "https://4815401.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
+      "scope": "restlets rest_webservices",
+      "alg": "RS256"
+    },
+    {
+      "label": "PS256_lowercase_clientid",
+      "status": 200,
+      "response": "{\"access_token\":\"eyJraWQiOiJjLjQ4MTU0MDEuMjAyNi0wMy0wN18wOS0xOC01MSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIxMTA5Ozc1NjY2IiwiYXVkIjpbIkU4MTU0N0QwLUREMzktNEQ1My04QkRGLTgyNUE2NEYwRDNDODs0ODE1NDAxIiwiN2I3MDk1MTA2ZTllZTVjNTRlMWI0MWIxZTAyZTQxODVlZGYzMDZkMmUxNmI1OTRkMjgwYWQ2ZmQ0NDE3MTBjNCJdLCJzY29wZSI6WyJyZXN0X3dlYnNlcnZpY2VzIl0sImlzcyI6Imh0dHBzOi8vc3lzdGVtLm5ldHN1aXRlLmNvbSIsIm9pdCI6MTc3NjMyNTUwNSwiZXhwIjoxNzc2MzI5MTA1LCJpYXQiOjE3NzYzMjU1MDUsImp0aSI6IjQ4MTU0MDEuYS1jLm51bGwuMTc3NjMyNTUwNTA2NyJ9.ixTQTOX-tQf1u-Cs5DfCSygimoZY643rIs8u-ObBmZpLPTv4zYwzHJxZ5cpqKws5MRn7Ldo2JyFhFAwUwNIqeY8k8gCpThfC6g1MmgmRJP4QKrJ1bsubW_CXTTkpx7zUK4MJdczsIidF29SbATQRCasURGnJQaR7KD7caLOnC8J4Ut5fzUg8tFH6GtUqbPdFwNIO_hfvDMwGUtXlsnysFmOwbELXM4Llwd7Q2TLYJQ26WElf6gnihERAXz2lWhHsgEfLcgh9GvxBgEsHKOnCmm8kui5IQCL83uSH5VoVVmzTos5Z5f3imWcyuemlc5PdrK-_teN3-AG2t9-OwJnbxa-VnyWmHDtWsMnMP9M7ZRUjuXHDR87mQZzQIKUQcdKon_k4ESzq61M4D7Qwjyp6GAEdW3RbForwjLERn5fgYZOR1A36tc9NRUpjIgZnXMugNwlxMuEFBadsO61PtvV-hHprFtlSVqmPgqWpMEF1REnHUliVIbl0YF-baxLpwNFjP0-0T41IXFn0VieJ0WfWVYpejasu8TiTGtfa5rdzZEvYBbNkYLBFAn9cNzMQzyCpImasuuSlZqCI8uZxM7ba4BbVO1qFC_F8tk39WLBZ2PkpQJqYrwmmYuGlTGo2S1_0xxSb-bEjE6jBWfdrGQL2qx7QJxw2q0TtUfiBxtCDAFY\",\"expires_in\":3600,\"token_type\":\"Bearer\"}\n",
+      "aud": "https://4815401.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
+      "scope": "rest_webservices",
+      "alg": "PS256"
+    },
+    {
+      "label": "PS256_short_aud",
+      "status": 405,
+      "response": "HTTP method POST is not supported by this URL",
+      "aud": "https://4815401.suitetalk.api.netsuite.com",
+      "scope": "rest_webservices",
+      "alg": "PS256"
+    }
+  ]
+}

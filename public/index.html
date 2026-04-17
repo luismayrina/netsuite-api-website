@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="NetSuite Rental Revenue Report Dashboard — Real-time data from NetSuite via OAuth 2.0 M2M">
+  <title>NetSuite Report Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header" id="main-header">
+    <div class="header-left">
+      <div class="logo">
+        <img src="ubix-logo.png" alt="UBIX Logo"
+          style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.4));" />
+      </div>
+      <div>
+        <h1 class="header-title">NetSuite Dashboard</h1>
+        <p class="header-subtitle">Rental Revenue Report</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-indicator" id="connection-status">
+        <span class="status-dot"></span>
+        <span class="status-text">Connecting...</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- Stats Cards -->
+    <section class="stats-grid" id="stats-section">
+      <div class="stat-card" id="stat-total-rows">
+        <div class="stat-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3h18v18H3z" />
+            <path d="M3 9h18" />
+            <path d="M3 15h18" />
+            <path d="M9 3v18" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="total-rows">—</span>
+          <span class="stat-label">Total Rows</span>
+        </div>
+      </div>
+      <div class="stat-card" id="stat-total-amount">
+        <div class="stat-icon accent-green">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="total-amount">—</span>
+          <span class="stat-label">Total Amount</span>
+        </div>
+      </div>
+      <div class="stat-card" id="stat-companies">
+        <div class="stat-icon accent-amber">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="total-companies">—</span>
+          <span class="stat-label">Companies</span>
+        </div>
+      </div>
+      <div class="stat-card" id="stat-fetch-time">
+        <div class="stat-icon accent-rose">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="fetch-time">—</span>
+          <span class="stat-label">Fetch Time</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary Charts -->
+    <section class="charts-grid hidden" id="charts-section">
+      <div class="chart-card">
+        <h3 class="chart-title">Revenue by Period</h3>
+        <div class="chart-wrap"><canvas id="chart-period"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Top 10 Companies by Revenue</h3>
+        <div class="chart-wrap chart-wrap-tall"><canvas id="chart-companies"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Revenue by Segment</h3>
+        <div class="chart-wrap"><canvas id="chart-segment"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Net Copies Trend by Period</h3>
+        <div class="chart-wrap"><canvas id="chart-copies"></canvas></div>
+      </div>
+    </section>
+
+    <!-- Controls Bar -->
+    <section class="controls-bar" id="controls-section">
+      <div class="search-box">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" id="search-input" placeholder="Search transactions..." autocomplete="off">
+      </div>
+      <div class="controls-right">
+        <button class="btn btn-secondary" id="btn-refresh" title="Refresh data">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10" />
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+          </svg>
+          Refresh
+        </button>
+        <button class="btn btn-primary" id="btn-export" title="Export to CSV">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Export CSV
+        </button>
+      </div>
+    </section>
+
+    <!-- Data Table -->
+    <section class="table-container" id="table-section">
+      <div class="loading-state" id="loading-state">
+        <div class="spinner"></div>
+        <p class="loading-text">Fetching data from NetSuite...</p>
+        <p class="loading-sub" id="loading-progress"></p>
+      </div>
+
+      <div class="error-state hidden" id="error-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="15" y1="9" x2="9" y2="15" />
+          <line x1="9" y1="9" x2="15" y2="15" />
+        </svg>
+        <h3>Connection Error</h3>
+        <p id="error-message"></p>
+        <button class="btn btn-primary" onclick="loadData()">Retry</button>
+      </div>
+
+      <div class="table-wrapper hidden" id="table-wrapper">
+        <p class="table-hint">&#128161; Click any row to see historical charts for that machine</p>
+        <table class="data-table" id="data-table">
+          <thead id="table-head"></thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+
+      <div class="pagination hidden" id="pagination">
+        <div class="pagination-info">
+          Showing <span id="page-start">0</span>&#8211;<span id="page-end">0</span> of <span id="page-total">0</span>
+          results
+        </div>
+        <div class="pagination-controls">
+          <button class="btn-page" id="btn-prev" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            Prev
+          </button>
+          <span class="page-number" id="page-number">Page 1</span>
+          <button class="btn-page" id="btn-next">
+            Next
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Row Detail Modal -->
+  <div class="modal-overlay hidden" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="modal-title">Machine History</h2>
+          <p class="modal-subtitle" id="modal-subtitle"></p>
+        </div>
+        <button class="modal-close" id="modal-close" title="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-stats" id="modal-stats"></div>
+      <div class="modal-charts">
+        <div class="modal-chart-card">
+          <h4>Amount Over Time</h4>
+          <div class="chart-wrap"><canvas id="modal-chart-amount"></canvas></div>
+        </div>
+        <div class="modal-chart-card">
+          <h4>Net Copies Over Time</h4>
+          <div class="chart-wrap"><canvas id="modal-chart-copies"></canvas></div>
+        </div>
+      </div>
+      <div class="modal-chart-card modal-chart-full">
+        <h4>Present vs Previous Reading Over Time</h4>
+        <div class="chart-wrap"><canvas id="modal-chart-readings"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>NetSuite OAuth 2.0 M2M Integration &#8226; Data refreshed in real-time</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

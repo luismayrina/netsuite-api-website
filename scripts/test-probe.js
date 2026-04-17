@@ -1,0 +1,1 @@
+require('dotenv').config(); require('./netsuite-query.js').runSuiteQL('SELECT * FROM transaction t WHERE t.type = \'CustInvc\' FETCH FIRST 1 ROWS ONLY').then(r => console.log(JSON.stringify(Object.keys(r.items[0]), null, 2))).catch(e => console.log('ERROR:', e.message));
