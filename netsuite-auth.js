@@ -19,7 +19,10 @@ let tokenExpiresAt = 0;
  * Build the NetSuite token endpoint URL from account ID
  */
 function getTokenUrl(accountId) {
-    const urlAccount = accountId.replace(/_/g, '-').toLowerCase();
+    if (!accountId) {
+        throw new Error('NS_ACCOUNT_ID is undefined. Please ensure it is set in your .env file.');
+    }
+    const urlAccount = accountId.toString().replace(/_/g, '-').toLowerCase();
     return `https://${urlAccount}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token`;
 }
 

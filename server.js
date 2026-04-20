@@ -7,7 +7,14 @@
  *   GET  /api/test      → Quick connectivity test
  */
 
-require('dotenv').config();
+const envResult = require('dotenv').config();
+
+if (envResult.error) {
+    console.error('⚠️  Warning: .env file not found or could not be loaded.');
+    console.error('   Details:', envResult.error.message);
+} else {
+    console.log('✅ .env file loaded successfully.');
+}
 
 const express = require('express');
 const path = require('path');
@@ -21,8 +28,36 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ─── API: Test Connection ───────────────────────────────
-console.log('Loaded Client ID:', process.env.NS_CLIENT_ID);
-console.log('Loaded Cert ID:', process.env.NS_CERTIFICATE_ID);
+// ─── Environment Diagnostics ───────────────────────────
+const requiredEnv = [
+    'NS_ACCOUNT_ID',
+    'NS_CLIENT_ID',
+    'NS_CERTIFICATE_ID',
+    'NS_PRIVATE_KEY_PATH'
+];
+
+console.log('\n🔍 Environment Check:');
+const missingEnv = [];
+requiredEnv.forEach(key => {
+    const value = process.env[key];
+    if (value) {
+        let displayValue = value;
+        // Mask sensitive items
+        if (key.includes('CLIENT_ID') || key.includes('CERTIFICATE_ID')) {
+            displayValue = `${value.substring(0, 8)}...${value.substring(value.length - 4)}`;
+        }
+        console.log(`  [OK] ${key}: ${displayValue}`);
+    } else {
+        console.error(`  [MISSING] ${key}`);
+        missingEnv.push(key);
+    }
+});
+
+if (missingEnv.length > 0) {
+    console.error('\n❌ CRITICAL: Missing required environment variables. The server will likely fail when processing requests.');
+    console.error('   Please check your .env file or environment settings.');
+}
+console.log('');
 app.get('/api/test', async (req, res) => {
     try {
         const result = await runSuiteQL(

@@ -13,7 +13,10 @@ const { getAccessToken, clearTokenCache } = require('./netsuite-auth');
  * Build the SuiteQL REST API URL from account ID
  */
 function getSuiteQLUrl(accountId) {
-    const urlAccount = accountId.replace(/_/g, '-').toLowerCase();
+    if (!accountId) {
+        throw new Error('NS_ACCOUNT_ID is undefined. Please ensure it is set in your .env file or environment.');
+    }
+    const urlAccount = accountId.toString().replace(/_/g, '-').toLowerCase();
     return `https://${urlAccount}.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql`;
 }
 
