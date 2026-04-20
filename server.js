@@ -27,7 +27,6 @@ const PORT = process.env.PORT || 3000;
 // ─── Serve Static Frontend ──────────────────────────────
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ─── API: Test Connection ───────────────────────────────
 // ─── Environment Diagnostics ───────────────────────────
 const requiredEnv = [
     'NS_ACCOUNT_ID',
@@ -58,6 +57,7 @@ if (missingEnv.length > 0) {
     console.error('   Please check your .env file or environment settings.');
 }
 console.log('');
+
 app.get('/api/test', async (req, res) => {
     try {
         const result = await runSuiteQL(
@@ -118,7 +118,6 @@ const PRODUCTION_REVENUE_QUERY = `
     BUILTIN.DF(t.createdby) AS created_by,
     t.createdby AS created_by_id,
     BUILTIN.DF(t.entity) AS entity_name,
-    -- BUILTIN.DF(tl.taxitem) AS tax_item,
     tl.custcol_ubix_invoice_rsa_mcc AS mcc,
     tl.custcol_ubix_invoice_mcv AS mvc,
     tl.custcol_ubix_invoice_rsa_frspldcopies AS free_copies,
@@ -127,7 +126,6 @@ const PRODUCTION_REVENUE_QUERY = `
     t.custbody_ubix_inv_pr_particulars AS particulars,
     tl.memo AS description_others,
     t.otherrefnum AS po_check_number,
-    -- c.custentity_ubix_inv_contactperson AS contact_person,
     t.custbody_ph4014_wtax_code AS withholding_tax_code,
     t.custbody_ubix_cvat AS creditable_vat,
     t.custbody_ubix_cwt AS creditable_wh_tax
@@ -197,6 +195,214 @@ app.get('/api/report/all', async (req, res) => {
             success: false,
             error: error.message
         });
+    }
+});
+
+// ─── API: Export SOA ────────────────────────────────────
+app.get('/api/export-soa', async (req, res) => {
+    try {
+        const { company, start, end } = req.query;
+        if (!company || !start || !end) {
+            return res.status(400).json({ success: false, error: 'Company, start date, and end date are required' });
+        }
+
+        const ExcelJS = require('exceljs');
+        const moment = require('moment');
+
+        console.log(`📊 Exporting SOA for [${company}] from [${start}] to [${end}]...`);
+
+        const escapedCompany = company.replace(/'/g, "''");
+        let soaQuery = PRODUCTION_REVENUE_QUERY.replace(
+            "t.type = 'CustInvc'",
+            `t.type = 'CustInvc'\n    AND BUILTIN.DF(t.entity) = '${escapedCompany}'`
+        );
+        soaQuery = soaQuery.replace("FETCH FIRST 5000 ROWS ONLY", "");
+
+        const { fetchAllRows } = require('./netsuite-query');
+        let items = await fetchAllRows(soaQuery.trim(), 1000, (batch, total) => {
+            console.log(`Fetched batch ${batch}, total rows for SOA: ${total}`);
+        });
+
+        const startDate = moment(start).startOf('day');
+        const endDate = moment(end).endOf('day');
+
+        // Filter items within the period covered
+        // Use explicit format to avoid moment deprecation warnings
+        items = items.filter(row => {
+            if (!row.date) return false;
+            // NetSuite often returns MM/DD/YYYY or similar. We specify common formats.
+            const d = moment(row.date, ['M/D/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD'], true);
+            return d.isValid() && d.isSameOrAfter(startDate) && d.isSameOrBefore(endDate);
+        });
+
+        items.reverse();
+
+        const wb = new ExcelJS.Workbook();
+        const templatePath = require('path').join(__dirname, 'template.xlsx');
+        await wb.xlsx.readFile(templatePath);
+        const ws = wb.worksheets[0];
+
+        // Header section mapping
+        ws.getCell('I1').value = endDate.toDate();
+        ws.getCell('I1').numFmt = 'mmmm d, yyyy';
+
+        ws.getCell('C3').value = moment().format('MMMM D, YYYY');
+        const clientCode = items.length > 0 ? items[0].sap_code : '';
+        ws.getCell('C4').value = clientCode;
+        ws.getCell('C5').value = company;
+        ws.getCell('E10').value = endDate.format('MMMM D, YYYY');
+
+        ws.getCell('I10').value = endDate.toDate();
+        ws.getCell('I10').numFmt = 'd-mmm-yy';
+        ws.getCell('J10').value = endDate.toDate();
+        ws.getCell('J10').numFmt = 'd-mmm-yy';
+
+        // Find "TOTAL" row
+        let totalRowIdx = -1;
+        ws.eachRow((row, rowNumber) => {
+            const firstCell = String(row.getCell(2).value).trim();
+            if (firstCell === 'TOTAL') totalRowIdx = rowNumber;
+        });
+        if (totalRowIdx === -1) {
+            ws.eachRow((row, rowNumber) => {
+                if (String(row.getCell(1).value).trim() === 'TOTAL') totalRowIdx = rowNumber;
+            });
+        }
+
+        // --- Style Capture ---
+        const dataRowStyles = [];
+        const templateDataRow = ws.getRow(12);
+        for (let c = 1; c <= 12; c++) {
+            dataRowStyles[c] = templateDataRow.getCell(c).style;
+        }
+
+        if (totalRowIdx > 12) {
+            ws.spliceRows(12, totalRowIdx - 12);
+        }
+
+        // Insert items
+        let newRows = [];
+        items.forEach(() => newRows.push([]));
+        if (newRows.length > 1) {
+            ws.spliceRows(12, 0, ...newRows);
+        } else if (newRows.length === 1) {
+            ws.spliceRows(12, 0, [[]]);
+        }
+
+        let r = 12;
+        let sum90 = 0, sumPastDue = 0, sumTotal = 0;
+
+        items.forEach(item => {
+            const row = ws.getRow(r);
+            for (let c = 1; c <= 12; c++) {
+                if (dataRowStyles[c]) row.getCell(c).style = dataRowStyles[c];
+            }
+
+            const invDate = moment(item.date, ['M/D/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD']);
+            const dueDate = moment(invDate).add(30, 'days');
+            const invAge = endDate.diff(invDate, 'days');
+            const pastDueDays = endDate.diff(dueDate, 'days');
+
+            let remarks = 'CURRENT';
+            if (pastDueDays > 90) remarks = '90+ DAYS AGE';
+            else if (pastDueDays > 0) remarks = 'PAST DUE';
+
+            const amount = parseFloat(item.amount) || 0;
+            if (pastDueDays > 90 && amount > 0) sum90 += amount;
+            else if (pastDueDays > 0 && amount > 0) sumPastDue += amount;
+            sumTotal += amount;
+
+            row.getCell(2).value = invDate.toDate();
+            row.getCell(3).value = item.invoice_no || item.document_number || '';
+            row.getCell(4).value = dueDate.toDate();
+            row.getCell(5).value = item.period_covered || item.period || '';
+
+            let particulars = item.particulars || '';
+            if (!particulars && item.model_serial_no) {
+                particulars = (item.item || '') + (item.model_serial_no ? ' / ' + item.model_serial_no : '');
+            }
+            row.getCell(6).value = particulars;
+
+            row.getCell(7).value = amount;
+            row.getCell(8).value = remarks;
+            row.getCell(9).value = invAge;
+            row.getCell(10).value = pastDueDays;
+
+            r++;
+        });
+
+        // Totals
+        ws.getCell(r, 7).value = sumTotal;
+        ws.getCell(r + 1, 7).value = sum90;
+        ws.getCell(r + 2, 7).value = sumPastDue;
+        ws.getCell(r + 3, 7).value = sum90 + sumPastDue;
+
+        let arRowIdx = -1;
+        ws.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+            const firstCell = String(row.getCell(2).value);
+            if (firstCell.includes('Total AR')) arRowIdx = rowNumber;
+        });
+        if (arRowIdx > 0) {
+            ws.getCell(arRowIdx, 7).value = sumTotal;
+        }
+
+        // --- Fix Advisory Section ---
+        const advisoryRows = [];
+        ws.eachRow((row, rowNumber) => {
+            const cellBValue = String(row.getCell(2).value);
+            if (cellBValue.includes('IMPORTANT') || cellBValue.includes('ADVISORY')) {
+                advisoryRows.push(rowNumber);
+            }
+        });
+
+        if (advisoryRows.length > 0) {
+            const firstAdvisoryRow = advisoryRows[0];
+            const borderStyle = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' }
+            };
+
+            advisoryRows.forEach((rowNum, index) => {
+                const row = ws.getRow(rowNum);
+
+                // Only keep "IMPORTANT ADVISORY" title in Row B of the first row
+                if (index > 0) {
+                    row.getCell(2).value = null;
+                }
+
+                const advisoryTextValue = String(row.getCell(3).value);
+                // Clean columns D-H if they have duplicate text
+                for (let c = 4; c <= 8; c++) {
+                    if (String(row.getCell(c).value) === advisoryTextValue) {
+                        row.getCell(c).value = null;
+                    }
+                }
+
+                // Merge C to G (3 to 7)
+                try {
+                    ws.mergeCells(rowNum, 3, rowNum, 7);
+                } catch (e) {
+                    // Ignore merge conflicts if already merged
+                }
+
+                // Apply borders to the merged block and label
+                row.getCell(2).border = borderStyle;
+                for (let c = 3; c <= 7; c++) {
+                    row.getCell(c).border = borderStyle;
+                }
+            });
+        }
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename="SOA-${escapedCompany}.xlsx"`);
+        await wb.xlsx.write(res);
+        res.end();
+
+    } catch (error) {
+        console.error('SOA Export API error:', error);
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 

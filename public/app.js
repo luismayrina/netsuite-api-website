@@ -42,6 +42,13 @@ const elements = {
     searchInput: $('search-input'),
     btnRefresh: $('btn-refresh'),
     btnExport: $('btn-export'),
+    btnExportSOA: $('btn-export-soa'),
+    soaModalOverlay: $('soa-modal-overlay'),
+    soaModalClose: $('soa-modal-close'),
+    soaCompanySelect: $('soa-company-select'),
+    soaStartDate: $('soa-start-date'),
+    soaEndDate: $('soa-end-date'),
+    btnGenerateSOA: $('btn-generate-soa'),
     loadingState: $('loading-state'),
     loadingProgress: $('loading-progress'),
     errorState: $('error-state'),
@@ -92,7 +99,29 @@ function setupEventListeners() {
     document.getElementById('modal-overlay').addEventListener('click', e => {
         if (e.target === e.currentTarget) closeModal();
     });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // SOA Modal
+    if (elements.btnExportSOA) {
+        elements.btnExportSOA.addEventListener('click', openSOAModal);
+    }
+    if (elements.soaModalClose) {
+        elements.soaModalClose.addEventListener('click', closeSOAModal);
+    }
+    if (elements.soaModalOverlay) {
+        elements.soaModalOverlay.addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeSOAModal();
+        });
+    }
+    if (elements.btnGenerateSOA) {
+        elements.btnGenerateSOA.addEventListener('click', generateSOA);
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            closeModal();
+            if (typeof closeSOAModal === 'function') closeSOAModal();
+        }
+    });
 
     // Export CSV
     elements.btnExport.addEventListener('click', () => exportCSV());
@@ -411,6 +440,107 @@ function showTable() {
 function setConnectionStatus(status, text) {
     elements.statusDot.className = 'status-dot ' + status;
     elements.statusText.textContent = text;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SOA Export
+// ═══════════════════════════════════════════════════════════
+function openSOAModal() {
+    const companyCol = state.columns.find(c =>
+        c.toLowerCase().includes('company') ||
+        c.toLowerCase().includes('entity') ||
+        c.toLowerCase().includes('customer')
+    );
+
+    if (companyCol && elements.soaCompanySelect) {
+        const unique = new Set(state.data.map(r => r[companyCol]).filter(Boolean));
+        const sorted = Array.from(unique).sort();
+
+        elements.soaCompanySelect.innerHTML = '<option value="">Select a Company...</option>';
+        sorted.forEach(comp => {
+            const opt = document.createElement('option');
+            opt.value = comp;
+            opt.textContent = comp;
+            elements.soaCompanySelect.appendChild(opt);
+        });
+    }
+
+    if (elements.soaModalOverlay) {
+        elements.soaModalOverlay.classList.remove('hidden');
+    }
+}
+
+function closeSOAModal() {
+    if (elements.soaModalOverlay) {
+        elements.soaModalOverlay.classList.add('hidden');
+    }
+    const statusMsg = document.getElementById('soa-status-message');
+    if (statusMsg) statusMsg.textContent = '';
+}
+
+async function generateSOA() {
+    const company = elements.soaCompanySelect.value;
+    const startDate = elements.soaStartDate.value;
+    const endDate = elements.soaEndDate.value;
+
+    if (!company) {
+        alert('Please select a Company Name.');
+        return;
+    }
+    if (!startDate || !endDate) {
+        alert('Please select BOTH Start and End period dates.');
+        return;
+    }
+
+    elements.btnGenerateSOA.disabled = true;
+    elements.btnGenerateSOA.textContent = 'Generating...';
+
+    const statusMsg = document.getElementById('soa-status-message');
+    if (statusMsg) {
+        statusMsg.innerHTML = '<div class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></div> <span style="vertical-align:middle;">Generating Excel...</span>';
+        statusMsg.style.color = '#9496a8';
+    }
+
+    try {
+        const params = new URLSearchParams({
+            company: company,
+            start: startDate,
+            end: endDate
+        });
+
+        const response = await fetch('/api/export-soa?' + params.toString(), {
+            method: 'GET'
+        });
+
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({ error: 'Failed to generate SOA' }));
+            throw new Error(err.error || 'Server error');
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const [yy, mm, dd] = endDate.split('-');
+        const shortFormat = `${mm}.${dd}.${yy.slice(2)}`;
+        a.download = `Sample SOA ${shortFormat}.xlsx`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        if (statusMsg) {
+            statusMsg.innerHTML = '<span style="color:#22c55e;">Success! File downloaded.</span>';
+        }
+        setTimeout(closeSOAModal, 2000);
+    } catch (e) {
+        if (statusMsg) {
+            statusMsg.innerHTML = `<span style="color:#f43f5e;">Error: ${e.message}</span>`;
+        } else {
+            alert('Error generating SOA: ' + e.message);
+        }
+    } finally {
+        elements.btnGenerateSOA.disabled = false;
+        elements.btnGenerateSOA.textContent = 'Generate Excel';
+    }
 }
 
 // ═══════════════════════════════════════════════════════════

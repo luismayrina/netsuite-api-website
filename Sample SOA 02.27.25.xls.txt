@@ -1,0 +1,44 @@
+Row 00  |  |  |  |  |  |  | [Col 07]: 45688 | [Col 08]: Cut-off date
+Row 01 [Col 00]: DATE | [Col 01]: 45740
+Row 02 [Col 00]: CLIENT CODE | [Col 01]: CC000463:2
+Row 03 [Col 00]: CLIENT NAME | [Col 01]: ABCDEFG
+Row 04 [Col 00]: STATEMENT OF ACCOUNT
+Row 05  |  |  | [Col 03]: 45740 |  |  |  | [Col 07]: 45688 | [Col 08]: 45688
+Row 06 [Col 00]: Invoice Date | [Col 01]: Invoice Number | [Col 02]: Due Date | [Col 03]: Period covered | [Col 04]: Particulars | [Col 05]: Amount | [Col 06]: REMARKS | [Col 07]: Invoice Days Age | [Col 08]: Past Due Days
+Row 07 [Col 00]: 43497 | [Col 01]: BI#000046614 | [Col 02]: 43527 | [Col 03]: 10/08/2018 - 11/07/2018 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 2191 | [Col 08]: 2161 | [Col 09]: 30
+Row 08 [Col 00]: 43497 | [Col 01]: BI#000046613 | [Col 02]: 43527 | [Col 03]: 09/08/2018 - 10/07/2018 | [Col 04]: VARIOUS MACHINE | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 2191 | [Col 08]: 2161 | [Col 09]: 30
+Row 09 [Col 00]: 43648 | [Col 01]: BI#000074230 | [Col 02]: 43678 | [Col 03]: 03/16/2019 - 04/03/2019 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 5003.88 | [Col 06]: 90+ DAYS AGE | [Col 07]: 2040 | [Col 08]: 2010 | [Col 09]: 30
+Row 10 [Col 00]: 43692 | [Col 01]: BI#000081336 | [Col 02]: 43722 | [Col 03]: 05/11/2019 - 06/11/2019 | [Col 04]: BH-362NV / A11U041002059 | [Col 05]: 6496 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1996 | [Col 08]: 1966 | [Col 09]: 30
+Row 11 [Col 00]: 43731 | [Col 01]: BI#000087670 | [Col 02]: 43761 | [Col 03]: 06/12/2019 - 07/12/2019 | [Col 04]: BH-362NV / A11U041002059 | [Col 05]: 6496 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1957 | [Col 08]: 1927 | [Col 09]: 30
+Row 12 [Col 00]: 43949 | [Col 01]: BI#000120928 | [Col 02]: 43979 | [Col 03]: 12/19/2019 - 01/14/2020 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1739 | [Col 08]: 1709 | [Col 09]: 30
+Row 13 [Col 00]: 43949 | [Col 01]: BI#000120930 | [Col 02]: 43979 | [Col 03]: 02/11/2020 - 03/09/2020 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1739 | [Col 08]: 1709 | [Col 09]: 30
+Row 14 [Col 00]: 43949 | [Col 01]: BI#000120929 | [Col 02]: 43979 | [Col 03]: 01/15/2020 - 02/10/2020 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1739 | [Col 08]: 1709 | [Col 09]: 30
+Row 15 [Col 00]: 44210 | [Col 01]: BI#000164348 | [Col 02]: 44240 | [Col 03]: 05/16/2019 - 06/11/2019 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1478 | [Col 08]: 1448 | [Col 09]: 30
+Row 16 [Col 00]: 44210 | [Col 01]: BI#000164349 | [Col 02]: 44240 | [Col 03]: 06/12/2019 - 07/15/2019 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1478 | [Col 08]: 1448 | [Col 09]: 30
+Row 17 [Col 00]: 44210 | [Col 01]: BI#000164350 | [Col 02]: 44240 | [Col 03]: 04/04/2019 - 05/15/2019 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1478 | [Col 08]: 1448 | [Col 09]: 30
+Row 18 [Col 00]: 44242 | [Col 01]: BI#000169241 | [Col 02]: 44272 | [Col 03]: 01/06/2021 - 02/05/2021 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1446 | [Col 08]: 1416 | [Col 09]: 30
+Row 19 [Col 00]: 44270 | [Col 01]: BI#000174112 | [Col 02]: 44300 | [Col 03]: 02/06/2021 - 03/09/2021 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1418 | [Col 08]: 1388 | [Col 09]: 30
+Row 20 [Col 00]: 44316 | [Col 01]: BI#000182621 | [Col 02]: 44346 | [Col 03]: 03/10/2021 - 04/09/2021 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1372 | [Col 08]: 1342 | [Col 09]: 30
+Row 21 [Col 00]: 44334 | [Col 01]: BI#000183931 | [Col 02]: 44364 | [Col 03]: 04/10/2021 - 05/14/2021 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1354 | [Col 08]: 1324 | [Col 09]: 30
+Row 22 [Col 00]: 44364 | [Col 01]: BI#000188973 | [Col 02]: 44394 | [Col 03]: 05/15/2021 - 06/15/2021 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1324 | [Col 08]: 1294 | [Col 09]: 30
+Row 23 [Col 00]: 44389 | [Col 01]: BI#000192737 | [Col 02]: 44419 | [Col 03]: 06/16/2021 - 07/06/2021 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 4368 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1299 | [Col 08]: 1269 | [Col 09]: 30
+Row 24 [Col 00]: 44546 | [Col 01]: BI#000215952 | [Col 02]: 44576 | [Col 03]: 07/07/2021 - 11/26/2021 | [Col 04]: BH-350NV / 21218390 | [Col 05]: 106.58 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1142 | [Col 08]: 1112 | [Col 09]: 30
+Row 25 [Col 00]: 44844 | [Col 01]: BI#000257883 | [Col 02]: 44874 | [Col 03]: 09/08/2022 - 10/06/2022 | [Col 04]: BH-363NV / A1UE041107805 | [Col 05]: 3920 | [Col 06]: 90+ DAYS AGE | [Col 07]: 844 | [Col 08]: 814 | [Col 09]: 30
+Row 26 [Col 00]: 45518 | [Col 01]: SVR-INV#000004304 | [Col 02]: 45548 | [Col 03]: 07/13/2024 - 08/12/2024 | [Col 04]: BH-363NV / A1UE041107805 | [Col 05]: 3850 | [Col 06]: 90+ DAYS AGE | [Col 07]: 170 | [Col 08]: 140 | [Col 09]: 30
+Row 27 [Col 00]: 45580 | [Col 01]: SVR-INV#000012643 | [Col 02]: 45610 | [Col 03]: 08/13/2024 - 09/30/2024 | [Col 04]: BH-363NV / A1UE041107805 | [Col 05]: 536.69 | [Col 06]: 90+ DAYS AGE | [Col 07]: 108 | [Col 08]: 78 | [Col 09]: 30
+Row 28  |  |  |  |  |  | [Col 06]: 90+ DAYS AGE | [Col 07]: 45688 | [Col 08]: 45688 | [Col 09]: 0
+Row 29 [Col 00]: TOTAL |  |  |  |  | [Col 05]: 87561.15000000001
+Row 30 [Col 00]: 90+ DAYS AGE | [Col 01]:    *Please pay within 7 days* |  |  |  | [Col 05]: 87561.15000000001
+Row 31 [Col 00]: PAST DUE | [Col 01]:    *Please pay within 15 days* |  |  |  | [Col 05]: 0
+Row 32 [Col 00]: TOTAL PAST DUE |  |  |  |  | [Col 05]: 87561.15000000001
+Row 33 [Col 00]: Less: Unapplied payments (3)
+Row 34 [Col 00]: OR Date | [Col 01]: OR number | [Col 02]: Date received | [Col 03]: Details |  | [Col 05]: Amount
+Row 35 [Col 00]: Total AR outstanding |  |  |  |  | [Col 05]: 87561.15000000001
+Row 36 [Col 00]: Installment receivables
+Row 37 [Col 00]: Invoice Date | [Col 01]: Invoice Number | [Col 02]: Due Date |  |  | [Col 05]: Amount
+Row 38 [Col 00]: Total Installment receivables not yet due |  |  |  |  | [Col 05]: 0
+Row 39 [Col 00]: IMPORTANT ADVISORY | [Col 01]: (1) Please pay within 7 days all invoices that are aged 90+ days for HOLD status to be lifted
+Row 40  | [Col 01]: (2) Please pay within 15 days all Past Due invoices
+Row 41  | [Col 01]: (3) Unapplied payments are amounts received that are not applied to invoices due to lack of payment details.  For correct matching, always provide invoice details of your payments.  For correct indetification of your online payment or direct deposit, always indicate your Company name together with the details of your payment
+Row 42  | [Col 01]: (4) Transactions posted after cut-off date of this statement will be shown in the next statement.   
+Row 43  | [Col 01]: (5)  Inform immediately our Credit and Collection Department for any discrepancy noted, call (02) 8846- 5076 to 77 or email us at cnc@ubix.com.ph. 

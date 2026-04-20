@@ -1,0 +1,33 @@
+Row 00  |  |  |  |  |  |  | [Col 07]: 45747 | [Col 08]: Cut-off date
+Row 01 [Col 00]: DATE | [Col 01]: 45750
+Row 02 [Col 00]: CLIENT CODE | [Col 01]: CC000029
+Row 03 [Col 00]: CLIENT NAME | [Col 01]: DISCOVER THE WORLD MARKETING INC.
+Row 04 [Col 00]: STATEMENT OF ACCOUNT
+Row 05  |  |  | [Col 03]: 45750 |  |  |  | [Col 07]: 45747 | [Col 08]: 45747
+Row 06 [Col 00]: Invoice Date | [Col 01]: Invoice Number | [Col 02]: Due Date | [Col 03]: Period covered | [Col 04]: Particulars | [Col 05]: Amount | [Col 06]: REMARKS | [Col 07]: Invoice Days Age | [Col 08]: Past Due Days
+Row 07 [Col 00]: 44524 | [Col 01]: BI#000212528 | [Col 02]: 44554 | [Col 03]: 10/13/2021 - 11/12/2021 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 13 | [Col 06]: 90+ DAYS AGE | [Col 07]: 1223 | [Col 08]: 1193 | [Col 09]: 30
+Row 08 [Col 00]: 45182 | [Col 01]: BI#000302039 | [Col 02]: 45212 | [Col 03]: 08/11/2023 - 09/06/2023 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 3813.1 | [Col 06]: 90+ DAYS AGE | [Col 07]: 565 | [Col 08]: 535 | [Col 09]: 30
+Row 09 [Col 00]: 45491 | [Col 01]: SVR-INV#000000480 | [Col 02]: 45521 | [Col 03]: 06/11/2024 - 07/08/2024 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 3745.01 | [Col 06]: 90+ DAYS AGE | [Col 07]: 256 | [Col 08]: 226 | [Col 09]: 30
+Row 10 [Col 00]: 45519 | [Col 01]: SVR-INV#000004586 | [Col 02]: 45549 | [Col 03]: 07/09/2024 - 08/07/2024 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 3642.87 | [Col 06]: 90+ DAYS AGE | [Col 07]: 228 | [Col 08]: 198 | [Col 09]: 30
+Row 11 [Col 00]: 45551 | [Col 01]: SVR-INV#000008692 | [Col 02]: 45581 | [Col 03]: 08/08/2024 - 09/10/2024 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 3642.87 | [Col 06]: 90+ DAYS AGE | [Col 07]: 196 | [Col 08]: 166 | [Col 09]: 30
+Row 12 [Col 00]: 45576 | [Col 01]: SVR-INV#000012327 | [Col 02]: 45606 | [Col 03]: 09/11/2024 - 10/09/2024 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 3642.87 | [Col 06]: 90+ DAYS AGE | [Col 07]: 171 | [Col 08]: 141 | [Col 09]: 30
+Row 13 [Col 00]: 45610 | [Col 01]: SVR-INV#000016837 | [Col 02]: 45640 | [Col 03]: 10/10/2024 - 11/11/2024 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 3642.87 | [Col 06]: 90+ DAYS AGE | [Col 07]: 137 | [Col 08]: 107 | [Col 09]: 30
+Row 14 [Col 00]: 45639 | [Col 01]: SVR-INV#000020910 | [Col 02]: 45669 | [Col 03]: 11/12/2024 - 12/11/2024 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 3642.87 | [Col 06]: 90+ DAYS AGE | [Col 07]: 108 | [Col 08]: 78 | [Col 09]: 30
+Row 15 [Col 00]: 45671 | [Col 01]: SVR-INV#000024998 | [Col 02]: 45701 | [Col 03]: 12/12/2024 - 01/08/2025 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 3642.87 | [Col 06]: PAST DUE | [Col 07]: 76 | [Col 08]: 46 | [Col 09]: 30
+Row 16 [Col 00]: 45702 | [Col 01]: SVR-INV#000029085 | [Col 02]: 45732 | [Col 03]: 01/09/2025 - 02/07/2025 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 3813.1 | [Col 06]: PAST DUE | [Col 07]: 45 | [Col 08]: 15 | [Col 09]: 30
+Row 17 [Col 00]: 45730 | [Col 01]: SVR-INV#000033203 | [Col 02]: 45760 | [Col 03]: 02/08/2025 - 03/10/2025 | [Col 04]: BH-283 / A1UF041111519 | [Col 05]: 3813.1 | [Col 06]: CURRENT | [Col 07]: 17 | [Col 08]: -13 | [Col 09]: 30
+Row 18 [Col 00]: TOTAL |  |  |  |  | [Col 05]: 37054.52999999999
+Row 19 [Col 00]: 90+ DAYS AGE | [Col 01]:    *Please pay within 7 days* |  |  |  | [Col 05]: 25785.459999999995
+Row 20 [Col 00]: PAST DUE | [Col 01]:    *Please pay within 15 days* |  |  |  | [Col 05]: 7455.969999999999
+Row 21 [Col 00]: TOTAL PAST DUE |  |  |  |  | [Col 05]: 33241.42999999999
+Row 22 [Col 00]: Less: Unapplied payments (3)
+Row 23 [Col 00]: OR Date | [Col 01]: OR number | [Col 02]: Date received | [Col 03]: Details |  | [Col 05]: Amount
+Row 24 [Col 00]: Total AR outstanding |  |  |  |  | [Col 05]: 37054.52999999999
+Row 25 [Col 00]: Installment receivables
+Row 26 [Col 00]: Invoice Date | [Col 01]: Invoice Number | [Col 02]: Due Date |  |  | [Col 05]: Amount
+Row 27 [Col 00]: Total Installment receivables not yet due |  |  |  |  | [Col 05]: 0
+Row 28 [Col 00]: IMPORTANT ADVISORY | [Col 01]: (1) Please pay within 7 days all invoices that are aged 90+ days for HOLD status to be lifted
+Row 29  | [Col 01]: (2) Please pay within 15 days all Past Due invoices
+Row 30  | [Col 01]: (3) Unapplied payments are amounts received that are not applied to invoices due to lack of payment details.  For correct matching, always provide invoice details of your payments.  For correct indetification of your online payment or direct deposit, always indicate your Company name together with the details of your payment
+Row 31  | [Col 01]: (4) Transactions posted after cut-off date of this statement will be shown in the next statement.   
+Row 32  | [Col 01]: (5)  Inform immediately our Credit and Collection Department for any discrepancy noted, call (02) 8846- 5076 to 77 or email us at cnc@ubix.com.ph. 
