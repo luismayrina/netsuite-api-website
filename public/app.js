@@ -493,12 +493,12 @@ async function generateSOA() {
     }
 
     elements.btnGenerateSOA.disabled = true;
-    elements.btnGenerateSOA.textContent = 'Generating...';
+    elements.btnGenerateSOA.innerHTML = '<div class="spinner" style="width:14px;height:14px;border-width:2px;margin:0;"></div> <span>Generating...</span>';
 
     const statusMsg = document.getElementById('soa-status-message');
     if (statusMsg) {
-        statusMsg.innerHTML = '<div class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></div> <span style="vertical-align:middle;">Generating Excel...</span>';
-        statusMsg.style.color = '#9496a8';
+        statusMsg.innerHTML = '<div class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px;"></div> <span style="vertical-align:middle;">Preparing Excel file...</span>';
+        statusMsg.style.color = 'var(--text-secondary)';
     }
 
     try {
@@ -528,18 +528,17 @@ async function generateSOA() {
         URL.revokeObjectURL(url);
 
         if (statusMsg) {
-            statusMsg.innerHTML = '<span style="color:#22c55e;">Success! File downloaded.</span>';
+            statusMsg.innerHTML = '<span style="color:var(--accent-green)">✓ SOA exported successfully!</span>';
         }
         setTimeout(closeSOAModal, 2000);
-    } catch (e) {
+    } catch (err) {
+        console.error('SOA Generation Error:', err);
         if (statusMsg) {
-            statusMsg.innerHTML = `<span style="color:#f43f5e;">Error: ${e.message}</span>`;
-        } else {
-            alert('Error generating SOA: ' + e.message);
+            statusMsg.innerHTML = `<span style="color:var(--accent-rose)">✕ Error: ${err.message}</span>`;
         }
     } finally {
         elements.btnGenerateSOA.disabled = false;
-        elements.btnGenerateSOA.textContent = 'Generate Excel';
+        elements.btnGenerateSOA.innerHTML = '<span>Generate Statement</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>';
     }
 }
 
