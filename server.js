@@ -198,23 +198,46 @@ app.get('/api/report/all', async (req, res) => {
     }
 });
 
+// ─── API: Fetch All Companies (for SOA dropdown) ────────
+app.get('/api/companies', async (req, res) => {
+    try {
+        console.log('🔍 Fetching all active companies...');
+        const query = "SELECT (entityid || ' ' || companyname) as name FROM customer WHERE isperson = 'F' AND isinactive = 'F' AND companyname IS NOT NULL ORDER BY entityid";
+        
+        const { fetchAllRows } = require('./netsuite-query');
+        const companies = await fetchAllRows(query, 1000);
+
+        res.json({
+            success: true,
+            items: companies.map(c => c.name),
+            count: companies.length
+        });
+    } catch (error) {
+        console.error('Companies API error:', error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
 // ─── API: Export SOA ────────────────────────────────────
 app.get('/api/export-soa', async (req, res) => {
     try {
-        const { company, start, end } = req.query;
-        if (!company || !start || !end) {
+        const { company: companyParam, start, end } = req.query;
+        const companyList = Array.isArray(companyParam) ? companyParam : [companyParam];
+        
+        if (!companyParam || !start || !end) {
             return res.status(400).json({ success: false, error: 'Company, start date, and end date are required' });
         }
 
         const ExcelJS = require('exceljs');
         const moment = require('moment');
 
-        console.log(`📊 Exporting SOA for [${company}] from [${start}] to [${end}]...`);
+        console.log(`📊 Exporting SOA for [${companyList.length}] companies from [${start}] to [${end}]...`);
 
-        const escapedCompany = company.replace(/'/g, "''");
+        const escapedCompanies = companyList.map(c => c.replace(/'/g, "''"));
+        const inClause = escapedCompanies.map(c => `'${c}'`).join(',');
+
         let soaQuery = PRODUCTION_REVENUE_QUERY.replace(
             "t.type = 'CustInvc'",
-            `t.type = 'CustInvc'\n    AND BUILTIN.DF(t.entity) = '${escapedCompany}'`
+            `t.type = 'CustInvc'\n    AND BUILTIN.DF(t.entity) IN (${inClause})`
         );
         soaQuery = soaQuery.replace("FETCH FIRST 5000 ROWS ONLY", "");
 
@@ -237,6 +260,18 @@ app.get('/api/export-soa', async (req, res) => {
 
         items.reverse();
 
+        // If preview requested, return early with JSON
+        if (req.query.preview === 'true') {
+            return res.json({
+                success: true,
+                items: items,
+                summary: {
+                    count: items.length,
+                    totalAmount: items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0)
+                }
+            });
+        }
+
         const wb = new ExcelJS.Workbook();
         const templatePath = require('path').join(__dirname, 'template.xlsx');
         await wb.xlsx.readFile(templatePath);
@@ -249,7 +284,9 @@ app.get('/api/export-soa', async (req, res) => {
         ws.getCell('C3').value = moment().format('MMMM D, YYYY');
         const clientCode = items.length > 0 ? items[0].sap_code : '';
         ws.getCell('C4').value = clientCode;
-        ws.getCell('C5').value = company;
+        const fullName = companyList[0];
+        const nameOnly = clientCode ? fullName.replace(clientCode, '').trim() : fullName;
+        ws.getCell('C5').value = nameOnly;
         ws.getCell('E10').value = endDate.format('MMMM D, YYYY');
 
         ws.getCell('I10').value = endDate.toDate();
@@ -396,7 +433,8 @@ app.get('/api/export-soa', async (req, res) => {
         }
 
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', `attachment; filename="SOA-${escapedCompany}.xlsx"`);
+        const filename = companyList.length > 1 ? `${companyList[0]}-and-others` : companyList[0];
+        res.setHeader('Content-Disposition', `attachment; filename="SOA-${filename.replace(/[^\w\s-]/g, '')}.xlsx"`);
         await wb.xlsx.write(res);
         res.end();
 

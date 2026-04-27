@@ -1015,3 +1015,58 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   color: var(--accent-rose);
   margin-left: 2px;
 }
+
+/* ─── Searchable Combobox ────────────────────────── */
+.search-combobox {
+  position: relative;
+  width: 100%;
+}
+
+.combobox-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  max-height: 240px;
+  background: #1a1a2e;
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+  z-index: 1100;
+  animation: fadeIn 0.15s ease;
+}
+
+.combobox-item {
+  padding: 10px 14px;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.combobox-item:last-child {
+  border-bottom: none;
+}
+
+.combobox-item:hover,
+.combobox-item.active {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--text-primary);
+  padding-left: 18px;
+}
+
+.combobox-item mark {
+  background: rgba(99, 102, 241, 0.3);
+  color: #fff;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.combobox-no-results {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}

@@ -23,7 +23,8 @@ const state = {
     searchQuery: '',
     isLoading: true,
     error: null,
-    fetchStartTime: 0
+    fetchStartTime: 0,
+    allCompanies: []
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -46,6 +47,10 @@ const elements = {
     soaModalOverlay: $('soa-modal-overlay'),
     soaModalClose: $('soa-modal-close'),
     soaCompanySelect: $('soa-company-select'),
+    soaCompanySearch: $('soa-company-search'),
+    soaCompanyResults: $('soa-company-results'),
+    soaSubContainer: $('soa-subcompanies-container'),
+    soaSubList: $('soa-subcompanies-list'),
     soaStartDate: $('soa-start-date'),
     soaEndDate: $('soa-end-date'),
     btnGenerateSOA: $('btn-generate-soa'),
@@ -53,6 +58,10 @@ const elements = {
     loadingProgress: $('loading-progress'),
     errorState: $('error-state'),
     errorMessage: $('error-message'),
+    btnPreviewSOA: $('btn-preview-soa'),
+    soaPreviewContainer: $('soa-preview-container'),
+    soaPreviewContent: $('soa-preview-content'),
+    soaPreviewTable: $('soa-preview-table'),
     tableWrapper: $('table-wrapper'),
     tableHead: $('table-head'),
     tableBody: $('table-body'),
@@ -115,6 +124,9 @@ function setupEventListeners() {
     if (elements.btnGenerateSOA) {
         elements.btnGenerateSOA.addEventListener('click', generateSOA);
     }
+    if (elements.btnPreviewSOA) {
+        elements.btnPreviewSOA.addEventListener('click', previewSOA);
+    }
 
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
@@ -143,6 +155,53 @@ function setupEventListeners() {
             updatePagination();
         }
     });
+
+    // SOA Searchable Dropdown
+    if (elements.soaCompanySearch) {
+        elements.soaCompanySearch.addEventListener('input', (e) => {
+            filterCompanies(e.target.value);
+        });
+
+        elements.soaCompanySearch.addEventListener('focus', () => {
+            if (state.allCompanies.length > 0) {
+                filterCompanies(elements.soaCompanySearch.value);
+            }
+        });
+
+        elements.soaCompanySearch.addEventListener('blur', () => {
+            setTimeout(() => {
+                if (elements.soaCompanyResults) elements.soaCompanyResults.classList.add('hidden');
+            }, 200);
+        });
+
+        elements.soaCompanySearch.addEventListener('keydown', (e) => {
+            const items = elements.soaCompanyResults.querySelectorAll('.combobox-item');
+            if (items.length === 0) return;
+
+            let activeIdx = Array.from(items).findIndex(item => item.classList.contains('active'));
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (activeIdx < items.length - 1) {
+                    if (activeIdx >= 0) items[activeIdx].classList.remove('active');
+                    items[activeIdx + 1].classList.add('active');
+                    items[activeIdx + 1].scrollIntoView({ block: 'nearest' });
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (activeIdx > 0) {
+                    items[activeIdx].classList.remove('active');
+                    items[activeIdx - 1].classList.add('active');
+                    items[activeIdx - 1].scrollIntoView({ block: 'nearest' });
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (activeIdx >= 0) {
+                    selectCompany(items[activeIdx].dataset.value);
+                }
+            }
+        });
+    }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -442,31 +501,158 @@ function setConnectionStatus(status, text) {
     elements.statusText.textContent = text;
 }
 
+async function loadCompanies() {
+    try {
+        const response = await fetch('/api/companies');
+        const data = await response.json();
+        if (data.success) {
+            state.allCompanies = data.items;
+            return data.items;
+        }
+        return [];
+    } catch (err) {
+        console.error('Failed to load companies:', err);
+        return [];
+    }
+}
+
 // ═══════════════════════════════════════════════════════════
 //  SOA Export
 // ═══════════════════════════════════════════════════════════
-function openSOAModal() {
-    const companyCol = state.columns.find(c =>
-        c.toLowerCase().includes('company') ||
-        c.toLowerCase().includes('entity') ||
-        c.toLowerCase().includes('customer')
-    );
-
-    if (companyCol && elements.soaCompanySelect) {
-        const unique = new Set(state.data.map(r => r[companyCol]).filter(Boolean));
-        const sorted = Array.from(unique).sort();
-
-        elements.soaCompanySelect.innerHTML = '<option value="">Select a Company...</option>';
-        sorted.forEach(comp => {
-            const opt = document.createElement('option');
-            opt.value = comp;
-            opt.textContent = comp;
-            elements.soaCompanySelect.appendChild(opt);
-        });
-    }
-
+async function openSOAModal() {
     if (elements.soaModalOverlay) {
         elements.soaModalOverlay.classList.remove('hidden');
+    }
+
+    // Reset search
+    if (elements.soaCompanySearch) {
+        elements.soaCompanySearch.value = '';
+        elements.soaCompanySelect.value = '';
+    }
+
+    // Ensure companies are loaded
+    if (state.allCompanies.length === 0) {
+        elements.soaCompanySearch.placeholder = 'Loading companies...';
+        elements.soaCompanySearch.disabled = true;
+        await loadCompanies();
+        elements.soaCompanySearch.placeholder = 'Type to search company...';
+        elements.soaCompanySearch.disabled = false;
+    }
+}
+
+function filterCompanies(query) {
+    if (!elements.soaCompanyResults) return;
+    
+    const term = query.toLowerCase().trim();
+    const filtered = state.allCompanies.filter(c => c.toLowerCase().includes(term));
+    
+    if (filtered.length === 0) {
+        elements.soaCompanyResults.innerHTML = '<div class="combobox-no-results">No companies found</div>';
+    } else {
+        const html = filtered.slice(0, 100).map((comp, idx) => {
+            let displayed = comp;
+            if (term) {
+                // Escape special regex characters in the term to avoid errors
+                const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                displayed = comp.replace(new RegExp(`(${escapedTerm})`, 'gi'), '<mark>$1</mark>');
+            }
+            return `<div class="combobox-item" data-value="${comp}">${displayed}</div>`;
+        }).join('');
+        elements.soaCompanyResults.innerHTML = html;
+
+        // Add click listeners to items
+        elements.soaCompanyResults.querySelectorAll('.combobox-item').forEach(item => {
+            item.addEventListener('click', () => selectCompany(item.dataset.value));
+        });
+    }
+    
+    elements.soaCompanyResults.classList.remove('hidden');
+}
+
+function selectCompany(value) {
+    elements.soaCompanySearch.value = value;
+    elements.soaCompanySelect.value = value;
+    elements.soaCompanyResults.classList.add('hidden');
+
+    // Find sub-companies
+    // A sub-company usually starts with the parent ID followed by a colon
+    // e.g., "CC000014" -> "CC000014:1"
+    const parentId = value.split(' ')[0]; // Extract the ID part (e.g. "CC000014")
+    const subCompanies = state.allCompanies.filter(c => 
+        c !== value && (c.startsWith(parentId + ':') || c.startsWith(parentId + ' :'))
+    );
+
+    if (subCompanies.length > 0) {
+        elements.soaSubList.innerHTML = subCompanies.map(sub => `
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; color: var(--text-secondary);">
+                <input type="checkbox" class="soa-sub-check" value="${sub}" checked style="width: 16px; height: 16px; accent-color: var(--accent-indigo);" />
+                <span>${sub}</span>
+            </label>
+        `).join('');
+        elements.soaSubContainer.classList.remove('hidden');
+    } else {
+        elements.soaSubContainer.classList.add('hidden');
+        elements.soaSubList.innerHTML = '';
+    }
+}
+
+async function previewSOA() {
+    const mainCompany = elements.soaCompanySelect.value;
+    const startDate = elements.soaStartDate.value;
+    const endDate = elements.soaEndDate.value;
+
+    if (!mainCompany) {
+        alert('Please select a Company Name.');
+        return;
+    }
+
+    const selectedCompanies = [mainCompany];
+    const subChecks = document.querySelectorAll('.soa-sub-check:checked');
+    subChecks.forEach(cb => selectedCompanies.push(cb.value));
+
+    if (!startDate || !endDate) {
+        alert('Please select BOTH Start and End period dates.');
+        return;
+    }
+
+    elements.btnPreviewSOA.disabled = true;
+    elements.btnPreviewSOA.textContent = 'Loading...';
+    elements.soaPreviewContainer.classList.add('hidden');
+
+    try {
+        const params = new URLSearchParams({
+            start: startDate,
+            end: endDate,
+            preview: 'true'
+        });
+        selectedCompanies.forEach(c => params.append('company', c));
+
+        const response = await fetch('/api/export-soa?' + params.toString());
+        const data = await response.json();
+
+        if (!data.success) throw new Error(data.error || 'Failed to fetch preview');
+
+        // Render Summary
+        elements.soaPreviewContent.innerHTML = `
+            <div>Transactions:</div><div style="text-align:right; color:var(--text-primary); font-weight:600;">${data.summary.count}</div>
+            <div>Total Amount:</div><div style="text-align:right; color:var(--accent-indigo); font-weight:600;">${data.summary.totalAmount.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+        `;
+
+        // Render Table
+        elements.soaPreviewTable.innerHTML = data.items.map(item => `
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                <td style="padding: 4px;">${item.date}</td>
+                <td style="padding: 4px;">${item.invoice_no || '---'}</td>
+                <td style="padding: 4px; text-align: right; color: var(--text-primary);">${(parseFloat(item.amount) || 0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+            </tr>
+        `).join('') || '<tr><td colspan="3" style="text-align:center; padding:20px;">No transactions in this period</td></tr>';
+
+        elements.soaPreviewContainer.classList.remove('hidden');
+    } catch (err) {
+        alert('Preview error: ' + err.message);
+    } finally {
+        elements.btnPreviewSOA.disabled = false;
+        elements.btnPreviewSOA.textContent = 'Preview';
     }
 }
 
@@ -474,19 +660,28 @@ function closeSOAModal() {
     if (elements.soaModalOverlay) {
         elements.soaModalOverlay.classList.add('hidden');
     }
+    if (elements.soaPreviewContainer) {
+        elements.soaPreviewContainer.classList.add('hidden');
+    }
     const statusMsg = document.getElementById('soa-status-message');
     if (statusMsg) statusMsg.textContent = '';
 }
 
 async function generateSOA() {
-    const company = elements.soaCompanySelect.value;
+    const mainCompany = elements.soaCompanySelect.value;
     const startDate = elements.soaStartDate.value;
     const endDate = elements.soaEndDate.value;
 
-    if (!company) {
+    if (!mainCompany) {
         alert('Please select a Company Name.');
         return;
     }
+
+    // Collect sub-companies
+    const selectedCompanies = [mainCompany];
+    const subChecks = document.querySelectorAll('.soa-sub-check:checked');
+    subChecks.forEach(cb => selectedCompanies.push(cb.value));
+
     if (!startDate || !endDate) {
         alert('Please select BOTH Start and End period dates.');
         return;
@@ -503,10 +698,12 @@ async function generateSOA() {
 
     try {
         const params = new URLSearchParams({
-            company: company,
             start: startDate,
             end: endDate
         });
+        
+        // Add all selected companies to the params
+        selectedCompanies.forEach(c => params.append('company', c));
 
         const response = await fetch('/api/export-soa?' + params.toString(), {
             method: 'GET'
@@ -521,9 +718,12 @@ async function generateSOA() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
+        
         const [yy, mm, dd] = endDate.split('-');
         const shortFormat = `${mm}.${dd}.${yy.slice(2)}`;
-        a.download = `Sample SOA ${shortFormat}.xlsx`;
+        const cleanName = mainCompany.split(' ').slice(1).join(' ').replace(/[^\w\s-]/g, '').trim() || mainCompany.replace(/[^\w\s-]/g, '');
+        
+        a.download = `SOA - ${cleanName} ${shortFormat}.xlsx`;
         a.click();
         URL.revokeObjectURL(url);
 
