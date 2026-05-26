@@ -1,0 +1,19 @@
+# ═══════════════════════════════════════════════════════════
+# NetSuite OAuth 2.0 M2M Configuration
+# ═══════════════════════════════════════════════════════════
+
+# NetSuite Account ID (from Company > Company Information)
+NS_ACCOUNT_ID=4815401
+
+# Client ID from Integration Record (M2M enabled)
+NS_CLIENT_ID=7b7095106e9ee5c54e1b41b1e02e4185edf306d2e16b594d280ad6fd441710c4
+
+# Certificate ID from M2M Setup page (after uploading certificate.pem)
+# Format: custcertificate_XXXXX  ← FILL THIS IN after uploading cert
+NS_CERTIFICATE_ID=5GPSbHMSU5BrB6w6uUVgqIDJseAneOXHgUQM9cum0wA
+
+# Path to your private key file
+NS_PRIVATE_KEY_PATH=./private_key.pem
+
+# Server port
+PORT=3000
